@@ -17,7 +17,7 @@ has access. Your instructor will send you a link to automatically set
 up this repository (services provided by
 [Classroom for GitHub](https://classroom.github.com/)).
 
-Your private team repository should be named **final-2020-PROJECT-TITLE**.
+Your private team repository should be named **final-2021-PROJECT-TITLE**.
 
 
 ### Updating the Team repository
