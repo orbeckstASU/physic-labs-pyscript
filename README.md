@@ -5,11 +5,15 @@ For your **Final Project** you have to:
 1. fulfill the **objectives** that you defined in your **Proposal**
    (add your `proposal.pdf` to the repository under `docs`);
 2. collaborate as a team;
-3. use the Wiki to keep a "lab notebook" for the project;
+3. use the [Wiki](wiki) to keep a shared "lab notebook" for the project;
 4. present the work as a video presentation;
 5. individually explain various aspects of the work in a virtual Q&A
 
-For an overview over the requirements see [docs/final_overview.pdf](docs/final_overview.pdf).
+For an overview over the requirements see
+[docs/final_overview.pdf](docs/final_overview.pdf) and the
+deliverables
+[docs/final_deliverables.pdf](docs/final_deliverables.pdf) (i.e.,
+notes on the Abstract and Video Presentation).
 
 ## Team repository
 You will be working in your private repository to which only your team
@@ -20,15 +24,6 @@ up this repository (services provided by
 Your private team repository should be named **final-2021-PROJECT-TITLE**.
 
 
-### Updating the Team repository
-
-In order to pull in changes and updates from the
-[Final Project](https://github.com/ASU-CompMethodsPhysics-PHY494/Final_Project)
-repository, run the [update.sh](scripts/update.sh) script:
-
-```bash
-./scripts/update.sh
-```
 
 ## Directory layout
 
