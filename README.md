@@ -1,4 +1,4 @@
-# ASU PHY 494 Final Project #
+# ASU PHY 432 Final Project #
 
 For your **Final Project** you have to:
 
@@ -21,7 +21,7 @@ has access. Your instructor will send you a link to automatically set
 up this repository (services provided by
 [Classroom for GitHub](https://classroom.github.com/)).
 
-Your private team repository should be named **final-2021-PROJECT-TITLE**.
+Your private team repository will be named **final-2022-TEAMNAME**.
 
 
 
