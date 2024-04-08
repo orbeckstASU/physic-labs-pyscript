@@ -21,7 +21,7 @@ has access. Your instructor will send you a link to automatically set
 up this repository (services provided by
 [Classroom for GitHub](https://classroom.github.com/)).
 
-Your private team repository will be named **final-2022-TEAMNAME**.
+Your private team repository will be named **final-2024-TEAMNAME**.
 
 
 
