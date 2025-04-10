@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>PyScript Test</title>
+
+        <!-- Below are the PyScript pyscript tags-->
+        <link rel="stylesheet" href="https://pyscript.net/releases/2025.3.1/core.css" />
+        <script type="module" src="https://pyscript.net/releases/2025.3.1/core.js"></script>
+        <!-- -->
+
+    </head>
+    <body>        
+    
+        <h1>PyScript Test Below!</h1>
+
+        <!-- Below is the tag required to identify python code-->
+        <!-- The tag below can be modified to load a local file instead. Check documentation. -->
+        <script type="py" config='{"packages":["numpy", "matplotlib"]}' target ="test" env="shared">
+            ## <script type="py" config='{"packages":["numpy", "matplotlib"]}' terminal> ## this alternative tag shows a terminal on the webpage
+        
+            from pyscript import display
+            import numpy as np
+            import matplotlib.pyplot as plt
+            
+            x = np.sqrt(4)
+            #x = 2 ** 2
+
+            #y = input()
+
+            z = np.linspace(0, 200, 50)
+            t = np.linspace(0, 50)
+
+            w = "www"
+
+            fig1,ax1 = plt.subplots()
+            ax1.plot(z, t)
+
+            display(f'x is equal to {x}')
+            #display(y)
+            display(fig1)
+            #plt.show() # this is the graph that appears under the page. It appears after where the terminal would be.
+            #print(x) ## this only appears in a webpage terminal when it is enabled
+
+        </script>
+        <!-- -->
+
+        <!--script type="py-editor" target="editor">
+            import sys
+            from pyscript import display
+            display(sys.version)
+        </script -->
+        <center><span style="color: chartreuse;"> Sample Editor</span></center>
+        <div id="editor"></div>
+                  
+        <div id="test"></div>
+
+    </body>
+</html>
