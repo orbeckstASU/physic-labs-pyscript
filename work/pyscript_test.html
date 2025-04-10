@@ -3,25 +3,43 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <title>PyScript 2025.3.1</title>
+        <title>PyScript Test</title>
+        
+        <!-- Below are the PyScript pyscript tags-->
         <link rel="stylesheet" href="https://pyscript.net/releases/2025.3.1/core.css" />
         <script type="module" src="https://pyscript.net/releases/2025.3.1/core.js"></script>
+        <!-- -->
+
     </head>
     <body>        
     
         <h1>PyScript Test Below!</h1>
-        <script type="py">
+
+        <!-- Below is the tag required to identify python code-->
+        <!-- The tag below can be modified to load a local file instead. Check documentation. -->
+        <script type="py" config='{"packages":["numpy", "matplotlib"]}'>
+            ## <script type="py" config='{"packages":["numpy", "matplotlib"]}' terminal> ## this alternative tag shows a terminal on the webpage
         
             from pyscript import display
-            import sys
-            ## display(sys.version)
-            ## import numpy as np
+            import numpy as np
+            import matplotlib.pyplot as plt
             
-            ##x = np.sqrt(4)
-            x = 2 ** 2
+            x = np.sqrt(4)
+            #x = 2 ** 2
 
-            display(f'x is equal to {x}') ## The display function is the function used to embed stuff in HTML
+            z = np.linspace(0, 200, 50  )
+            t = np.linspace(0, 50)
+
+            fig1,ax1 = plt.subplots()
+            ax1.plot(z, t)
+
+            display(f'x is equal to {x}')
+            display(fig1)
+            plt.show()
+            #print(x) ##this only appears in a webpage terminal when it is enabled
 
         </script>
+        <!-- -->
+
     </body>
 </html>
