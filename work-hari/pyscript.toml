@@ -1,0 +1,3 @@
+name = "PyScript Test"
+description = "A pyscript test."
+packages = ["matplotlib", "numpy"]
