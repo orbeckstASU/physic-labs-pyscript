@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>PyScript Testing</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="testing.css">
+    <script type="module" src="https://pyscript.net/releases/2025.3.1/core.js"></script>
+
+    <script type="module">
+        const loading = document.getElementById('loading');
+        addEventListener('py:ready', () => loading.close());
+        loading.showModal();
+    </script>
+</head>
+
+<body>
+    <header>
+        <h1>Testing PyScript</h1>
+    </header>
+    
+    <main>
+    <dialog id="loading">
+        <h1>Loading...</h1>
+    </dialog>
+
+    <script type="py" config='{"packages":["numpy", "matplotlib"]}'>
+        import numpy as np
+        import matplotlib.pyplot as plt
+        plt.style.use('ggplot')
+        from pyscript import display
+
+        # Testing out python with simple 2D trajectory
+        def trajectory(x0, y0, v0x, v0y, a, t):
+            x = x0 + v0x*t
+            y = y0 + (v0y*t) - (0.5*a*t**2)
+            return x, y
+
+        t = np.linspace(0, 5, 100)
+        x, y = trajectory(0, 200, 10, 10, 9.8, t)
+        plt.plot(x, y)
+        plt.title('')
+        plt.xlabel('x')
+        plt.ylabel('y')
+        plt.show()
+    </script>
+    </main>
+
+    <footer>
+        
+    </footer>
+</body>
+</html>
+
