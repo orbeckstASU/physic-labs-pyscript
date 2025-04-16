@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>PyScript Testing</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="testing.css">
+    <script type="module" src="https://pyscript.net/releases/2025.3.1/core.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>Projectile Motion</h1>
+    </header>
+    
+    <main>
+    <h2>Enter intital conditions and duration of simulation</h2>
+    <input type="number" id="x0" placeholder="Initial x value: "><br>
+    <input type="number" id="y0" placeholder="Initial y value: "><br>
+    <input type="number" id="v0x" placeholder="Initial v0x value: "><br>
+    <input type="number" id="v0y" placeholder="Initial v0y value: "><br>
+    <input type="number" id="a" placeholder="Initial acceleration value: "><br>
+    <input type="number" id="t" placeholder="Duration (s): "><br>
+    <button id="SubBtn">Submit</button><br><br>
+
+    <script type="py" config='{"packages":["numpy", "matplotlib"]}'>
+        import numpy as np
+        import matplotlib.pyplot as plt
+        plt.style.use('ggplot')
+
+        from js import document
+        from pyodide.ffi import create_proxy
+        from pyscript import display
+
+        
+        # Testing out python with simple 2D trajectory
+        def trajectory(event):
+            x0 = float(document.getElementById("x0").value)
+            y0 = float(document.getElementById("y0").value)
+            v0x = float(document.getElementById("v0x").value)
+            v0y = float(document.getElementById("v0y").value)
+            a = float(document.getElementById("a").value)
+            t = np.linspace(0, float(document.getElementById("t").value), 100)
+            x = x0 + (v0x * t)
+            y = y0 + (v0y * t) - (0.5 * a * t**2)
+            plt.plot(x, y)
+            plt.show()  
+
+        button = document.getElementById("SubBtn")
+        button.addEventListener("click", create_proxy(trajectory))
+    </script>
+    </main>
+
+    <footer>
+    </footer>
+</body>
+</html>
+
