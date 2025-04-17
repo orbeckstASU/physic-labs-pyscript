@@ -42,11 +42,31 @@
             v0x = float(document.getElementById("v0x").value)
             v0y = float(document.getElementById("v0y").value)
             a = float(document.getElementById("a").value)
-            t = np.linspace(0, float(document.getElementById("t").value), 100)
-            x = x0 + (v0x * t)
-            y = y0 + (v0y * t) - (0.5 * a * t**2)
-            plt.plot(x, y)
-            plt.show()  
+            t_max = float(document.getElementById("t").value)
+
+            x_vals = []
+            y_vals = []
+            t = 0.0
+            dt = 0.01
+
+            while t <= t_max:
+                x = x0 + (v0x * t)
+                y = y0 + (v0y * t) - (0.5 * a * t**2)
+                
+                if y <= 0:
+                    y = 0
+                    x_vals.append(x)
+                    y_vals.append(y)
+                    break
+                
+                x_vals.append(x)
+                y_vals.append(y)
+                
+                t += dt
+            
+            # Plot the trajectory
+            plt.plot(x_vals, y_vals)
+            plt.show()
 
         button = document.getElementById("SubBtn")
         button.addEventListener("click", create_proxy(trajectory))
