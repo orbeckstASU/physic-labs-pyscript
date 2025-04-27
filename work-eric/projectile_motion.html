@@ -19,8 +19,8 @@
     <h2>Enter intital conditions and duration of simulation</h2>
     <input type="number" id="x0" placeholder="Initial x value: "><br>
     <input type="number" id="y0" placeholder="Initial y value: "><br>
-    <input type="number" id="v0x" placeholder="Initial v0x value: "><br>
-    <input type="number" id="v0y" placeholder="Initial v0y value: "><br>
+    <input type="number" id="v" placeholder="Initial velocity"><br>
+    <input type="number" id="theta" placeholder="Initial theta value: "><br>
     <input type="number" id="a" placeholder="Initial acceleration value: "><br>
     <input type="number" id="t" placeholder="Duration (s): "><br>
     <button id="SubBtn">Submit</button><br><br>
@@ -39,8 +39,10 @@
         def trajectory(event):
             x0 = float(document.getElementById("x0").value)
             y0 = float(document.getElementById("y0").value)
-            v0x = float(document.getElementById("v0x").value)
-            v0y = float(document.getElementById("v0y").value)
+            rad = np.radians(float(document.getElementById("theta").value))
+            v = float(document.getElementById("v").value)
+            v0x = v*np.cos(rad)
+            v0y = v*np.sin(rad)
             a = float(document.getElementById("a").value)
             t = np.linspace(0, float(document.getElementById("t").value), 100)
             x = x0 + (v0x * t)

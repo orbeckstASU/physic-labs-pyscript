@@ -17,3 +17,43 @@ main {
     color: #000; 
     padding-top: 10px;}
 
+nav {
+    font-size: 2em;
+    font-weight: bold;
+    text-decoration: underline;}
+
+nav ul {
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-around;}
+
+nav li {
+    border-radius: none;}
+
+nav a {
+    color: #000;
+    text-decoration: none;
+    transition: color 0.5s ease-out;}
+
+nav a:hover {color: #0003c0;}
+
+p {
+    text-align: center;
+    color: #000;
+    font-size: 1.5em;}
+
+input {
+    color: #000;
+    width: 250px;
+    height: 20px;
+    font-size: 18px;
+    padding: 5px;
+    margin-bottom: 10px;}
+
+button {
+    width: 50;
+    height: 25;
+    font-size: 18px;
+    font-weight: bold;}

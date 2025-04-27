@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Projectile Motion</title>
+    <title>Projectile Motion 2</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -19,8 +19,8 @@
     <h2>Enter intital conditions and duration of simulation</h2>
     <input type="number" id="x0" placeholder="Initial x value: "><br>
     <input type="number" id="y0" placeholder="Initial y value: "><br>
-    <input type="number" id="v0x" placeholder="Initial v0x value: "><br>
-    <input type="number" id="v0y" placeholder="Initial v0y value: "><br>
+    <input type="number" id="v" placeholder="Initial velocity"><br>
+    <input type="number" id="theta" placeholder="Initial theta value: "><br>
     <input type="number" id="a" placeholder="Initial acceleration value: "><br>
     <input type="number" id="t" placeholder="Duration (s): "><br>
     <button id="SubBtn">Submit</button><br><br>
@@ -39,21 +39,23 @@
         def trajectory(event):
             x0 = float(document.getElementById("x0").value)
             y0 = float(document.getElementById("y0").value)
-            v0x = float(document.getElementById("v0x").value)
-            v0y = float(document.getElementById("v0y").value)
+            rad = np.radians(float(document.getElementById("theta").value))
+            v = float(document.getElementById("v").value)
+            v0x = v*np.cos(rad)
+            v0y = v*np.sin(rad)
             a = float(document.getElementById("a").value)
-            t_max = float(document.getElementById("t").value)
+            t_max = np.linspace(0, float(document.getElementById("t").value), 100)
 
             x_vals = []
             y_vals = []
             t = 0.0
             dt = 0.01
 
-            while t <= t_max:
+            while t <= t_max.any():
                 x = x0 + (v0x * t)
                 y = y0 + (v0y * t) - (0.5 * a * t**2)
                 
-                if y <= 0:
+                if y < 0:
                     y = 0
                     x_vals.append(x)
                     y_vals.append(y)
