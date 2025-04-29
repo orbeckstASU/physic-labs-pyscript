@@ -27,7 +27,7 @@ nav ul {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: space-around;}
+    justify-content:space-around;}
 
 nav li {
     border-radius: none;}
@@ -57,3 +57,6 @@ button {
     height: 25;
     font-size: 18px;
     font-weight: bold;}
+
+    footer {
+        color: #fff;}
