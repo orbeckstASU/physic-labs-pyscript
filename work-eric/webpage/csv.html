@@ -30,9 +30,63 @@
             <br><br><br>
         </p>
 
+        <!-- Input for csv file-->
+        <form id="csv-form">
+            <label for="myfile" style="font-size: 2em;">Select a file (.csv):</label>
+            <input type="file" id="myfile" name="myfile"><br><br>
+            <button id="SubBtn">Submit</button><br><br>
+        </form>
+
+        <div id="output"></div>
+
+        <script type="py" config='{"packages":["numpy", "matplotlib"]}'>
+            import numpy as np
+            import matplotlib.pyplot as plt
+            import matplotlib.animation as animation
+            from matplotlib_pyodide.browser_backend import TimerWasm
+            from pyodide.ffi import create_proxy
+            from js import document, FileReader
+            import io
+    
+            def handle_file_upload(event):
+                event.preventDefault()  # Prevent form submission
+
+                # Get the file from the input element
+                file_input = document.getElementById("myfile")
+                files = file_input.files
+
+                if files.length == 0:
+                    print("No file selected.")
+                    return
+
+                file = files.item(0)
+
+                # Create a FileReader instance
+                reader = FileReader.new()
+
+                # Define what happens when file is read
+                def onload(e):
+                    content = reader.result
+
+                    # Convert JS string to Python string
+                    content_str = str(content)
+                    data = np.genfromtxt(io.StringIO(content_str), delimiter=",", skip_header=1)
+
+                    output_div = document.getElementById("output")
+                    output_div.innerHTML = f"<pre>{data}</pre>"
+
+                    print("CSV Data Loaded:")
+                    print(data)
 
 
+                # Bind the onload function and read file
+                reader.onload = create_proxy(onload)
+                reader.readAsText(file)
 
+            # Submit button
+            form = document.getElementById("csv-form")
+            form.addEventListener("submit", create_proxy(handle_file_upload))
+        </script>
     </main>
 
 
