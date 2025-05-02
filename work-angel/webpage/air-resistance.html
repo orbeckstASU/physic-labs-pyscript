@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Projectile Motion Animation</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="testing.css">
+    <script type="module" src="https://pyscript.net/releases/2025.3.1/core.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>Projectile Motion Animation With Air Resistance</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="home.html">Home</li>
+            <li><a href="animation.html">Animation Without Air Resistance</a></li>
+            <li><a href="air-resistance.html">Animation With Air Resistance</a></li>
+            <li><a href="csv.html">CSV</a></li>
+        </ul>
+    </nav>
+
+    <main>
+
+        <p style="text-align:left">
+            This animation is simulating the motion of a baseball being hit.  
+            The simulation accounts for air resistance and the rotation of a baseball. <br><br>
+            <strong>Given Parameters:</strong><br>
+            Mass of baseball = 0.14883 kg; Radius of baseball = 0.03734 m; Air density = 1.225 kg/m^3; 
+            Acceleration due to gravity = 9.81 m/s^2; Typical drag coefficient = 0.4 <br><br>
+            <strong>In the MLB: </strong><br>
+            Average homerun exit velocity: 95 mph = 42.47 m/s <br>
+            Average homerun launch angle: 25-30 degrees <br>
+            Average homerun spin rate: 1500 rpm <br> <br> 
+
+            References: <br>
+            <a href="https://baseballsavant.mlb.com/leaderboard/statcas?&type=batter&year=2025&position=&team=&min=q&sort=exit_velocity_avg&sortDir=desc">Exit Velocity</a>
+            <a href="https://baseballsavant.mlb.com/statcast_hit_probability?year=2025&type=la">Launch Angle</a>
+            <a href="https://baseball.physics.illionois.edu/ajpfeb08.pdf">Spin Rate</a>
+        </p>
+
+
+        <h2>Initial conditions:</h2>
+        <input type="text" id="pos" placeholder="Initial position (x,y)"><br>
+        <input type="number" id="v" placeholder="Initial velocity (m/s)"><br>
+        <input type="number" id="theta" placeholder="Launch angle (degrees)"><br>
+        <input type="number" id="spin" placeholder="Enter RPM (rev/min)"><br>
+        <button id="SubBtn">Submit</button><br><br>
+
+        <div id="animation"></div>
+    </main>
+
+    <script type="py" config='{"packages":["numpy", "matplotlib"]}'>
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import matplotlib.animation as animation
+        from matplotlib_pyodide.browser_backend import TimerWasm  # type: ignore
+        from pyodide.ffi import create_proxy
+        from js import document
+
+        class Timer(TimerWasm):
+            def __init__(self, interval=None):
+                self._timer = None
+                super().__init__(interval=interval)
+
+
+        def rk4(y, f, t, h):
+            """Runge-Kutta RK4 step"""
+            k1 = f(t, y)
+            k2 = f(t + 0.5 * h, y + 0.5 * h * k1)
+            k3 = f(t + 0.5 * h, y + 0.5 * h * k2)
+            k4 = f(t + h, y + h * k3)
+            return y + h / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
+
+        def C_L(S):
+            return 0.62 * S**0.7
+
+        def simulate_baseball(v0, omega, r0=None, h=0.01, C_D=0.40, g=9.81, rho=1.225, r=0.07468/2, m=0.14883, R_homeplate=18.4):
+            """simulate baseball pitch
+            Parameters
+            ----------
+            v0 : array
+            initial velocity (vx, vy, vz) in m/s
+            omega : array
+            angular velocity vector of the ball ("spin"), in rad/s
+            r0 : array, optional
+            initial position of the ball (in m) when it leaves the pitcher's hand
+            as (x, y, z); the default is (0, 2, 0)
+            h : float, optional
+            integration time step in s, default is 0.01 s
+            C_D : float, optional
+            drag coefficient, default is 0.40
+            g : float, optional
+            acceleration due to gravity, default 9.81 kg/(m*s^2)
+            rho : float, optional
+            density of air, default 1.225 kg/m^3
+            r : float, optional
+            radius of the baseball
+            m : float, optional
+            mass of the baseball
+            R_homeplate : float, optional
+            distance of the catcher from the pitcher
+
+            Returns
+            -------
+            positions : array
+            The array contains an entry (time, x, y, z) for each time step.
+            """
+            
+            # all SI units (kg, m)
+            if r0 is None:
+                r0 = np.array([0, 0, 0])
+
+            omega = np.asarray(omega)
+
+            domega = np.linalg.norm(omega)
+            A = np.pi*r**2
+            rhoArm = rho * A * r / m
+            b2 = 0.5 * C_D * rho * A
+
+            a_gravity = np.array([0, -g, 0])
+
+            def f(t, y):
+                # y = [x, y, z, vx, vy, vz]
+                v = y[3:]
+                dv = np.linalg.norm(v)
+                S = r*domega/dv
+                a_magnus = 0.5 * C_L(S) * rhoArm / S * np.cross(omega, v)
+                a_drag = -b2/m * dv * v
+                a = a_gravity + a_drag + a_magnus
+                return np.array([y[3], y[4], y[5], a[0], a[1], a[2]])
+
+            t = 0
+            # initialize 3D!
+            y = np.array([r0[0], r0[1], r0[2], v0[0], v0[1], v0[2]], dtype=np.float64)
+            positions = [[t, y[0], y[1], y[2]]] # record t, x and y, z
+
+            while y[1] >= -0.001:
+                t += h
+                y[:] = rk4(y, f, t, h)
+                positions.append([t, y[0], y[1], y[2]])  # record t, x and y, z
+
+            return np.array(positions)
+
+        def trajectory(event):
+            pos_str = document.getElementById("pos").value
+            x0_str, y0_str = pos_str.split(",")
+            x0 = float(x0_str.strip())
+            y0 = float(y0_str.strip())
+            v = float(document.getElementById("v").value)
+            theta = np.radians(float(document.getElementById("theta").value))
+            spin = float(document.getElementById("spin").value)
+
+            # Construct initial conditions
+            v0x = v * np.cos(theta)
+            v0y = v * np.sin(theta)
+            v0 = [v0x, v0y, 0.0]
+            r0 = [x0, y0, 0.0]
+            rad = (spin*2*np.pi)/60
+            omega = rad * np.array([0, 0, 1])  
+
+            # Run RK4 simulation
+            r = simulate_baseball(v0=v0, omega=omega, r0=r0)
+
+            x_vals = r[:,1]
+            y_vals = r[:,2]
+            frames = len(x_vals)
+
+            # Set up the figure
+            fig, ax = plt.subplots()
+            ax.set_xlim(0, max(x_vals)*1.1)
+            ax.set_ylim(0, max(y_vals)*1.2 if len(y_vals) > 0 else 10)
+            ax.set_xlabel('X position (m)')
+            ax.set_ylabel('Y position (m)')
+            ax.set_title('Projectile Motion')
+            plt.grid()
+
+            scat = ax.scatter(x_vals[0], y_vals[0], c='r', s=50, label="Projectile")
+            traj_line, = ax.plot([], [], 'b-', label="Trajectory")
+            ax.legend()
+
+            def update(frame):
+                scat.set_offsets([x_vals[frame-1], y_vals[frame-1]])
+                traj_line.set_data(x_vals[:frame], y_vals[:frame])
+                return scat, traj_line
+
+            ani = animation.FuncAnimation(
+                fig,
+                update,
+                frames=frames,
+                interval=50,
+                event_source=Timer(interval=50)
+            )
+
+            animation_div = document.getElementById("animation")
+            animation_div.replaceChildren(
+                document.createRange().createContextualFragment(ani.to_jshtml())
+            )
+
+        button = document.getElementById("SubBtn")
+        button.addEventListener("click", create_proxy(trajectory))
+
+    </script>
+
+    <footer>
+        2025 PHY432 Final Project - Tatooine Popular Liberation Front
+    </footer>
+</body>
+</html>

@@ -13,15 +13,38 @@
     </head>
     <body>        
     
-        <h1>PyScript Test Below!</h1>
+        <main>
+            <p>Upload .csv file to be analyzed here.</p>
 
-        <script type="py" target="test" terminal>
+            <form action="/action_page.php">
+                <input type="file" id="myFile" name="filename">
+                <input type="submit">
+            </form>
+
+
+        </main>
+
+        <h1>PyScript Test Below!</h1>
+        <script type="py" config='{"packages":["numpy", "matplotlib"]}'>
+            import numpy as np
+            import matplotlib.pyplot as plt
+            from pyodide.ffi import create_proxy
+            from js import document
+
+
+        </script>
+
+
+
+
+
+        <!-- script type="py" target="test" terminal>
             import sys 
             from pyscript import display
 
             print('5')
             display('5')
-        </script>
+        </script -->
 
 
         <!-- script type="py-editor" target="editor">

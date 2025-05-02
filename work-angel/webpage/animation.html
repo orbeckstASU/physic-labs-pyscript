@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Projectile Motion Animation</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="testing.css">
+    <script type="module" src="https://pyscript.net/releases/2025.3.1/core.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>Projectile Motion Animation Without Air Resistance</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="home.html">Home</li>
+            <li><a href="animation.html">Animation Without Air Resistance</a></li>
+            <li><a href="air-resistance.html">Animation With Air Resistance</a></li>
+            <li><a href="csv.html">CSV</a></li>
+        </ul>
+    </nav>
+
+    <main>
+
+        <p>
+            Enter the initial conditions for a projectile below to see an animated plot of the motion.  
+            This simulation assumes no air resistance or rotation.  
+        </p>
+
+
+        <h2>Initial conditions:</h2>
+        <input type="text" id="pos" placeholder="Initial position (x,y):"><br>
+        <input type="number" id="v" placeholder="Initial velocity (m/s)"><br>
+        <input type="number" id="theta" placeholder="Launch angle (degrees)"><br>
+        <input type="number" id="a" placeholder="Gravity (m/s^2)"><br>
+        <input type="number" id="t" placeholder="Simulation duration (s)"><br>
+        <button id="SubBtn">Submit</button><br><br>
+
+        <div id="animation"></div>
+    </main>
+
+    <script type="py" config='{"packages":["numpy", "matplotlib"]}'>
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import matplotlib.animation as animation
+        from matplotlib_pyodide.browser_backend import TimerWasm  # type: ignore
+        from pyodide.ffi import create_proxy
+        from js import document
+
+        class Timer(TimerWasm):
+            def __init__(self, interval=None):
+                self._timer = None
+                super().__init__(interval=interval)
+
+        def trajectory(event):
+            pos_str = document.getElementById("pos").value
+            x0_str, y0_str = pos_str.split(",")
+            x0 = float(x0_str.strip())
+            y0 = float(y0_str.strip())
+            v = float(document.getElementById("v").value)
+            theta = np.radians(float(document.getElementById("theta").value))
+            a = float(document.getElementById("a").value)
+            t_total = float(document.getElementById("t").value)
+
+            v0x = v * np.cos(theta)
+            v0y = v * np.sin(theta)
+
+            frames = 500
+            t_vals = np.linspace(0, t_total, frames)
+
+            x_vals = x0 + v0x * t_vals
+            y_vals = y0 + v0y * t_vals - 0.5 * a * t_vals**2
+
+            # make sure y-position is never < 0
+            for i in range(len(y_vals)):
+                if y_vals[i] < 0:
+                    x_vals = x_vals[:i+1]
+                    y_vals = y_vals[:i+1]
+                    t_vals = t_vals[:i+1]
+                    frames = len(t_vals)
+                    break
+
+            # Set up the figure
+            fig, ax = plt.subplots()
+            ax.set_xlim(0, max(x_vals)*1.1)
+            ax.set_ylim(0, max(y_vals)*1.2 if len(y_vals) > 0 else 10)
+            ax.set_xlabel('X position (m)')
+            ax.set_ylabel('Y position (m)')
+            ax.set_title('Projectile Motion')
+            plt.grid()
+
+            scat = ax.scatter(x_vals[0], y_vals[0], c='r', s=50, label="Projectile")
+            traj_line, = ax.plot([], [], 'b-', label="Trajectory")
+            ax.legend()
+
+            def update(frame):
+                data = np.stack([x_vals[:frame], y_vals[:frame]]).T
+                scat.set_offsets([x_vals[frame-1], y_vals[frame-1]])
+                traj_line.set_data(x_vals[:frame], y_vals[:frame])
+                return scat, traj_line
+
+            ani = animation.FuncAnimation(
+                fig,
+                update,
+                frames=frames,
+                interval=100,
+                event_source=Timer(interval=100)
+            )
+
+            animation_div = document.getElementById("animation")
+            animation_div.replaceChildren(
+                document.createRange().createContextualFragment(ani.to_jshtml())
+            )
+
+        button = document.getElementById("SubBtn")
+        button.addEventListener("click", create_proxy(trajectory))
+    </script>
+
+    <footer>
+        2025 PHY432 Final Project - Tatooine Popular Liberation Front
+    </footer>
+</body>
+</html>
