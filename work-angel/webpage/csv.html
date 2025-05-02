@@ -6,10 +6,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link rel="stylesheet" href="testing.css">
+    <link rel="stylesheet" href="bulma.css">
     <script type="module" src="https://pyscript.net/releases/2025.3.1/core.js"></script>
 </head>
-
+<style>
+    div.fixed {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      width: 300px;
+      border: 3px solid #73AD21;
+    }
+</style>
+    
 <body>
     <header>
         <h1>CSV Animation</h1>
@@ -36,10 +45,18 @@
             <input type="file" id="myfile" name="myfile"><br><br>
             <button id="SubBtn">Submit</button><br><br>
         </form>
+        
+        <div style="fixed" id="terminal"></div>
 
-        <div id="output"></div>
+        <!-- div id="output"></div-->
 
-        <script type="py" config='{"packages":["numpy", "matplotlib"]}'>
+        <div class="fixed">
+            This div element has position: fixed;
+            </div>
+            
+
+
+        <script type="py" id="terminal" config='{"packages":["numpy", "matplotlib"]}' terminal>
             import numpy as np
             import matplotlib.pyplot as plt
             import matplotlib.animation as animation
@@ -72,8 +89,11 @@
                     content_str = str(content)
                     data = np.genfromtxt(io.StringIO(content_str), delimiter=",", skip_header=1)
 
-                    output_div = document.getElementById("output")
-                    output_div.innerHTML = f"<pre>{data}</pre>"
+                    #output_div = document.getElementById("output")
+                    #output_div.innerHTML = f"<pre>{data}</pre>"
+
+                    '''Note about print functions: Print Functions only appear in webpage when the terminal is enabled within browser.
+                    to enable the terminal, type "terminal" at the end of the python script tag'''
 
                     print("CSV Data Loaded:")
                     print(data)
