@@ -42,6 +42,7 @@ fig, ax = plt.subplots()
 # Configuration Parameters
 def config():
     frequency = 20 #Hz
+    print(f' Motion sensor frequency: {frequency} Hz')
     collection_time = round(float(input('Enter collection time in seconds (multiples of 0.1): ')), 1)
     print(f'collection time: {collection_time} s\n')
     collection_time_ms = collection_time * 1000 #ms
@@ -111,7 +112,7 @@ def plot_graph():
     if (number_of_sensors>2):
         ax.plot(sensor_times,sensor_readings2, color='k',label=column_headers[2]) #black line for sensor 3
 
-    plt.ylabel('Position(m)') #name and units of the sensor selected overwitten. Use column_headers to use with other sensors.
+    plt.ylabel('Position(m)') #name and units of the sensor selected overwitten. Use column_headers to use with other sensors. 
     plt.xlabel('Time(s)')
     plt.grid(True, alpha=0.5) #This controls whether there is a grid on the graph
     plt.pause (0.01) # display the graph briefly, as the readings are taken
