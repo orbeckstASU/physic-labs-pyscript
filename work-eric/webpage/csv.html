@@ -23,13 +23,14 @@
             <li><a href="home.html">Home</li>
             <li><a href="animation.html">Animation Without Air Resistance</a></li>
             <li><a href="air-resistance.html">Animation With Air Resistance</a></li>
-            <li><a href="csv.html">CSV</a></li>
+            <li><a href="csv.html">Animation from CSV file</a></li>
         </ul>
     </nav>
 
     <main>
         <p>
-            This page will use a csv file to create an animation of projectile motion.  
+            Upload a csv file which has the format (time, position). After clicking the "Submit" button, three animated plots will
+            be created: position vs time, velocity vs time, and acceleration vs time. 
             <br><br><br>
         </p>
 
@@ -80,10 +81,15 @@
                     content = reader.result
                     data = np.genfromtxt(io.StringIO(str(content)), delimiter=",", skip_header=1)
 
-                    t = data[:, 0].astype(float)
-                    x = data[:, 1].astype(float)
-                    dt = t[1] - t[0]
-                    v = np.gradient(x, dt)
+                    t0 = data[:, 0].astype(float)
+                    x0 = data[:, 1].astype(float)
+                    dt = t0[1] - t0[0]
+                    v0 = np.gradient(x0, dt)
+                    a0 = np.gradient(v0, dt)
+                    a = a0[2:-2]
+                    v = v0[2:-2]
+                    x = x0[2:-2]
+                    t = t0[2:-2]
 
                     # --- x vs t plot ---
                     fig1, ax1 = plt.subplots()
@@ -107,28 +113,46 @@
                     line2, = ax2.plot([], [], 'g-')
                     point2, = ax2.plot([], [], 'ro')
 
+                    # --- a vs t plot ---
+                    fig3, ax3 = plt.subplots()
+                    ax3.set_xlim(t[0], t[-1]+1)
+                    ax3.set_ylim(min(a) - 1, max(a) + 1)
+                    ax3.set_xlabel("Time (s)")
+                    ax3.set_ylabel("Acceleration (m/s^2)")
+                    ax3.set_title("a vs. t")
+                    ax3.grid()
+                    line3, = ax3.plot([], [], 'g-')
+                    point3, = ax3.plot([], [], 'ro')
+
                     def update(frame):
                         line1.set_data(t[:frame], x[:frame])
                         point1.set_data(t[frame-1], x[frame-1])
 
                         line2.set_data(t[:frame], v[:frame])
                         point2.set_data(t[frame-1], v[frame-1])
-                        return line1, point1, line2, point2
+
+                        line3.set_data(t[:frame], a[:frame])
+                        point3.set_data(t[frame-1], a[frame-1])
+
+                        return line1, point1, line2, point2, line3, point3
 
                     frames = len(t)
                     ani1 = animation.FuncAnimation(fig1, update, frames=frames, interval=100, event_source=Timer(interval=100))
                     ani2 = animation.FuncAnimation(fig2, update, frames=frames, interval=100, event_source=Timer(interval=100))
+                    ani3 = animation.FuncAnimation(fig3, update, frames=frames, interval=100, event_source=Timer(interval=100))
 
                     anim_div = document.getElementById("fixed")
                     anim_div.replaceChildren(
                         document.createRange().createContextualFragment(
-                            ani1.to_jshtml() + ani2.to_jshtml()
+                            ani1.to_jshtml() + ani2.to_jshtml() + ani3.to_jshtml()
                         )
                     )
 
+                
                 reader.onload = create_proxy(onload)
                 reader.readAsText(file)
 
+            # Makes 'submit' button run code
             form = document.getElementById("csv-form")
             form.addEventListener("submit", create_proxy(handle_file_upload))
 
