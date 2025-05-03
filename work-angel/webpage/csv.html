@@ -96,7 +96,41 @@
                     to enable the terminal, type "terminal" at the end of the python script tag'''
 
                     print("CSV Data Loaded:")
-                    print(data)
+                    #print(data)
+
+                    data_points = np.array(data)
+                    t_array = data_points[:,0]
+                    t_array = t_array.astype(float)
+
+                    x_array = data_points[:,1]
+                    x_array = x_array.astype(float)
+
+                    #print(np.shape(t_array))
+                    #print(np.shape(x_array))
+
+                    fig0, ax0 = plt.subplots()
+                    ax0.plot(t_array,x_array, 'ro')
+                    plt.xlabel('Time (s)')
+                    plt.ylabel('Position (m)')
+                    plt.show()
+
+                    dt = t_array[1] - t_array[0]
+                    v_array = np.gradient(x_array, dt)
+
+                    print(np.shape(v_array))
+
+                    fig1, ax1 = plt.subplots()
+                    ax1.plot(t_array, v_array, 'go')
+                    plt.xlabel('Time (s)')
+                    plt.ylabel('Velocity (m/s)')
+                    plt.show()
+
+                    
+
+
+                    #return t_array, x_array
+                
+                
 
 
                 # Bind the onload function and read file
