@@ -58,7 +58,7 @@ gdx.open(connection='usb')   # Use connection='ble' for a Bluetooth connection
 #gdx.open(connection='usb', device_to_open='GDX-FOR 071000U9')  # You can also use an argument to specify the device
 
 #gdx.select_sensors() # You will be asked to select the sensors to be used. You can select up to three.
-gdx.select_sensors([5]) # You can also use an argument to select sensors. Separate multiple sensors with a comma, ([1,3])
+gdx.select_sensors([6]) # You can also use an argument to select sensors. Separate multiple sensors with a comma, ([1,3])
 
 # This gets the name and units of the sensors selected.
 column_headers = gdx.enabled_sensor_info() 
