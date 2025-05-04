@@ -1,7 +1,13 @@
-Summarize the contributions of the teammates here.
+Tatooine Popular Liberation Front 2025 Final Contributions
 
 Eric Olson: 
-- work goes here
+- Created the website for the project using html, and styled the website using css. 
+- Learned how to use pyscript to incorporate python with html.  
+- Created two animations on the website using user input. One is a projectile motion animation without air resistance using
+  simple equations of motion, and the other is a projectile motion animation with air resistance and rotation, utilizing rk4 
+  integration and functions learned in class. 
+- Created a webpage to take input as a csv file. Angel figured out how to produce a plot with the csv data, then I was able 
+  to animate those plots.  
 
 Angel Duarte:
 - work goes here

@@ -1,6 +1,16 @@
 Integrating Vernier Sensor-Based Data in Pyscript
-
 Angel Duarte, Hari Guali, Eric Olson
 
-REPLACE THE TEXT IN THIS FILE WITH YOUR TEXT AND RENAME IT TO abstract.txt.
-Text of the abstract. It should not be longer than 200 words. Describe concisely what the problem is that you want to solve, what approach/methods you used (but keep it at a high level, don't write what you called your functions etc), and what your results are. Keep it all one paragraph. The idea is that a reader should be able to understand in 2 minutes or less what you are doing, how you are doing it, and what you get. Finish with one sentence on conclusions or future work. Finally include a statement along the following lines: Code is available at <URL> [under <LICENSE>]. --- Licensing is  optional, see https://github.com/blog/1530-choosing-an-open-source-license which will send you to http://choosealicense.com/. REPLACE ALL THE TEXT IN THIS ABSTRACT WITH YOUR OWN TITLE, AUTHOR NAMES AND ABSTRACT. THEN COMMIT AND PUT "added abstract" IN THE COMMIT MESSAGE.
+
+ABSTRACT 
+
+Often experiments done in labs at schools require licensed software for analysis which limits the use of these tools, and our project focused on creating a web 
+based software for all students to use.  Using PyScript, an open source platform for python in the browser, and HTML, we created a website that allows users to 
+upload CSV files containing position-time data to automatically visualize motion, velocity, and acceleration. Once the CSV is uploaded, python is used to determine 
+the velocity and acceleration through numerical differentiation.  These CSV files can come from sensors such as Vernier motion sensors, integrating real world 
+motion from a lab.  Aside from uploading data in the format of a CSV, students can also produce an animation of projectile motion, with or without air resistance, 
+by entering initial conditions of the projectile.  This allows students to self discover how different initial conditions affect trajectories.  With the creation 
+of animated plots from both CSV files and user inputs, the goals of this project were achieved.  Further development could lead to better visualization tools and 
+further applications for other physics experiments. 
+
+The code for this project is available at https://github.com/Py4Phy/final-2025-tatooine-popular-liberation-front.git.  
