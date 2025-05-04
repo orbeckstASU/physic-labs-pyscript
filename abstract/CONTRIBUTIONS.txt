@@ -8,6 +8,7 @@ Eric Olson:
   integration and functions learned in class. 
 - Created a webpage to take input as a csv file. Angel figured out how to produce a plot with the csv data, then I was able 
   to animate those plots.  
+- Wrote the abstract. 
 
 Angel Duarte:
 - work goes here
