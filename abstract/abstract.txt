@@ -5,7 +5,7 @@ Angel Duarte, Hari Guali, Eric Olson
 
 ABSTRACT 
 
-Often experiments done in labs at schools require licensed software for analysis which limits the use of these tools, and our project focused on creating a web 
+Often experiments done in labs at schools require limiting proprietary software for analysis which limits the use of these tools, and our project focused on creating an open source web 
 based software for all students to use.  Using PyScript, an open source platform for python in the browser, and HTML, we created a website that allows users to 
 upload CSV files containing position-time data to automatically visualize motion, velocity, and acceleration. Once the CSV is uploaded, python is used to determine 
 the velocity and acceleration through numerical differentiation.  These CSV files can come from sensors such as Vernier motion sensors, integrating real world 
