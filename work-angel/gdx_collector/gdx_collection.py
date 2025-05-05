@@ -249,15 +249,15 @@ plt.show()
 file_msg = "Enter a file name for the .csv and .png files to be created. For example, 'file_name.csv' without the apostrophes. \n If no file name is entered, the files will be named 'my_data'.\n Enter 'x' to continue without saving. \n\nEnter file name here: "
 filename = input(file_msg)
 if filename != 'x':
+    save_directory = "./my_collected_data/"
     if len(filename) < 1:
         filename = 'my_data'
-    fig.savefig(filename)
+    print(f' Your file name is: "{filename}".')
+    fig.savefig(save_directory + filename)
     if filename[-4:] != ".csv":
         filename = filename + ".csv"
 
-    print(f' Your file name is: "{filename}".')
-
-    with open(filename, 'w', newline='') as my_data_file:
+    with open(save_directory + filename, 'w', newline='') as my_data_file:
         csv_writer = csv.writer(my_data_file)
         column_headers = ["Time (s), Position (m)"]
         csv_writer.writerow(column_headers)

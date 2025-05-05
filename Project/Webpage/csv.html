@@ -38,16 +38,32 @@
         <form id="csv-form">
             <label for="myfile" style="font-size: 2em;">Select a file (.csv):</label>
             <input type="file" id="myfile" name="myfile"><br><br>
+            <label for="xfit"> Linear fit for x vs t graph</label>
+                <input type="number" id="xfit" placeholder="Type 1 for True, 0 for False"><br>
+            </label>
+            <label for="vfit"> Linear fit for v vs t graph
+                <input type="number" id="vfit" placeholder="Type 1 for True, 0 for False"><br>
+            </label>
             <button id="SubBtn">Submit</button><br><br>
         </form>
+
         
+
         <div id="fixed" id="terminal"></div>
+
+        <!-- form id="xt fit">
+            <button id="xfit">X vs T: Line of Best Fit</button>
+        </form -->
+        
+        <form id="vt">
+            <button id="v-fit">V vs T: Line of Best Fit</button>
+        </form>
 
         <!-- div id="output"></div-->
 
-        <div class="fixed">
+        <!-- div class="fixed">
             This div element has position: fixed;
-            </div>
+            </div -->
             
 
 
@@ -81,6 +97,7 @@
                     content = reader.result
                     data = np.genfromtxt(io.StringIO(str(content)), delimiter=",", skip_header=1)
 
+                    plt.close()
                     t0 = data[:, 0].astype(float)
                     x0 = data[:, 1].astype(float)
                     dt = t0[1] - t0[0]
@@ -90,38 +107,50 @@
                     v = v0[2:-2]
                     x = x0[2:-2]
                     t = t0[2:-2]
+                    x_m, x_b = np.polyfit(t0, x0, 1)
+                    v_m, v_b = np.polyfit(t0[1:-1], v0[1:-1], 1)
+                    x_fit = bool(int((document.getElementById("xfit").value)))
+                    v_fit = bool(int((document.getElementById("vfit").value)))
+                    print(v_fit)
 
                     # --- x vs t plot ---
                     fig1, ax1 = plt.subplots()
-                    ax1.set_xlim(t[0], t[-1]+1)
+                    ax1.set_xlim(t[0], t[-1]+ dt)
                     ax1.set_ylim(min(x) * 0.9, max(x) * 1.1)
                     ax1.set_xlabel("Time (s)")
                     ax1.set_ylabel("Position (m)")
                     ax1.set_title("x vs. t")
                     ax1.grid()
-                    line1, = ax1.plot([], [], 'b-')
+                    if x_fit:
+                        plt.axline((0, x_b), slope=x_m, alpha=0.5, label=f'$v = {round(x_m, 3)} m/s/s * t + {round(x_b, 3)}m/s$')
+                        plt.legend(loc="best")
+                    line1, = ax1.plot([], [], 'b.')
                     point1, = ax1.plot([], [], 'ro')
 
                     # --- v vs t plot ---
                     fig2, ax2 = plt.subplots()
-                    ax2.set_xlim(t[0], t[-1]+1)
+                    ax2.set_xlim(t[0], t[-1]+ dt)
                     ax2.set_ylim(min(v) * 0.9, max(v) * 1.1)
                     ax2.set_xlabel("Time (s)")
                     ax2.set_ylabel("Velocity (m/s)")
                     ax2.set_title("v vs. t")
                     ax2.grid()
-                    line2, = ax2.plot([], [], 'g-')
+                    if v_fit:
+                        plt.axline((0, v_b), slope=v_m, alpha=0.5, label=f'$v = {round(v_m, 3)} m/s/s * t + {round(v_b, 3)}m/s$')
+                        plt.legend(loc="best")
+                    line2, = ax2.plot([], [], 'g.')
                     point2, = ax2.plot([], [], 'ro')
+
 
                     # --- a vs t plot ---
                     fig3, ax3 = plt.subplots()
-                    ax3.set_xlim(t[0], t[-1]+1)
+                    ax3.set_xlim(t[0], t[-1]+ dt)
                     ax3.set_ylim(min(a) - 1, max(a) + 1)
                     ax3.set_xlabel("Time (s)")
                     ax3.set_ylabel("Acceleration (m/s^2)")
                     ax3.set_title("a vs. t")
                     ax3.grid()
-                    line3, = ax3.plot([], [], 'g-')
+                    line3, = ax3.plot([], [], 'g.')
                     point3, = ax3.plot([], [], 'ro')
 
                     def update(frame):
@@ -137,9 +166,9 @@
                         return line1, point1, line2, point2, line3, point3
 
                     frames = len(t)
-                    ani1 = animation.FuncAnimation(fig1, update, frames=frames, interval=100, event_source=Timer(interval=100))
-                    ani2 = animation.FuncAnimation(fig2, update, frames=frames, interval=100, event_source=Timer(interval=100))
-                    ani3 = animation.FuncAnimation(fig3, update, frames=frames, interval=100, event_source=Timer(interval=100))
+                    ani1 = animation.FuncAnimation(fig1, update, frames=frames, interval=100, event_source=Timer(interval=100), repeat = False)
+                    ani2 = animation.FuncAnimation(fig2, update, frames=frames, interval=100, event_source=Timer(interval=100), repeat = False)
+                    ani3 = animation.FuncAnimation(fig3, update, frames=frames, interval=100, event_source=Timer(interval=100), repeat = False)
 
                     anim_div = document.getElementById("fixed")
                     anim_div.replaceChildren(
