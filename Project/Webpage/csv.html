@@ -126,7 +126,7 @@
                     ax1.set_title("x vs. t")
                     ax1.grid()
                     if x_fit:
-                        plt.axline((0, x_b), slope=x_m, alpha=0.5, label=f'$v = {round(x_m, 3)} m/s * t + {round(x_b, 3)}m$')
+                        plt.axline((0, x_b), slope=x_m, alpha=0.5, label=f'$x = {round(x_m, 3)} m/s * t + {round(x_b, 3)}m$')
                         plt.legend(loc="best")
                     line1, = ax1.plot([], [], 'b.')
                     point1, = ax1.plot([], [], 'ro')
